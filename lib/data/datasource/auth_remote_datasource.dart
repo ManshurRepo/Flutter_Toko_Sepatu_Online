@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_fic9_ecommerce_app/data/models/requests/register_request_model.dart';
-import 'package:http/http.dart' as http;
-import '../../common/constants/varibales.dart';
+
+import '../../common/constants/variables.dart';
 import '../models/requests/login_request_model.dart';
+import '../models/requests/register_request_model.dart';
 import '../models/responses/auth_respons_model.dart';
+import 'package:http/http.dart' as http;
 
 class AuthRemoteDatasource {
   Future<Either<String, AuthResponseModel>> register(

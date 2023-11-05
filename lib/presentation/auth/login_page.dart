@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fic9_ecommerce_app/data/datasource/auth_local_datasource.dart';
 
 import '../../common/components/button.dart';
 import '../../common/components/custom_text_field.dart';
@@ -7,7 +8,7 @@ import '../../common/components/space_height.dart';
 import '../../common/constants/colors.dart';
 import '../../common/constants/images.dart';
 import '../../data/models/requests/login_request_model.dart';
-import '../home/dashboard_page.dart';
+import '../dashboard/dashboard_page.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/register/register_bloc.dart';
 import 'register_page.dart';
@@ -82,7 +83,8 @@ class _LoginPageState extends State<LoginPage> {
             listener: (context, state) {
               state.maybeWhen(
                   orElse: () {},
-                  succes: (data) {
+                  succes: (data) async {
+                    AuthLocalDataSource().saveAuthData(data);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
