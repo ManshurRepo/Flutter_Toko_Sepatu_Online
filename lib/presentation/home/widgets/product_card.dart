@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fic9_ecommerce_app/common/components/space_height.dart';
+import 'package:flutter_fic9_ecommerce_app/common/components/space_height_width.dart';
 import 'package:flutter_fic9_ecommerce_app/common/constants/colors.dart';
 
 import '../../../common/constants/variables.dart';

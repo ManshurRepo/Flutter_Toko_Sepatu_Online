@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fic9_ecommerce_app/common/extensions/int_ext.dart';
 import 'package:flutter_fic9_ecommerce_app/data/models/responses/products_response_model.dart';
 
-import '../../../common/components/space_height.dart';
+import '../../../common/components/space_height_width.dart';
 import '../../../common/constants/colors.dart';
 import '../../home/widgets/product_model.dart';
 

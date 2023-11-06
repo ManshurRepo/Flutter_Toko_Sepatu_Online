@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_fic9_ecommerce_app/common/components/space_height.dart';
+import 'package:flutter_fic9_ecommerce_app/common/components/space_height_width.dart';
 
 import '../../../common/constants/colors.dart';
 

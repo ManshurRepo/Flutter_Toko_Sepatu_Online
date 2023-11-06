@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/components/space_height.dart';
+import '../../../common/components/space_height_width.dart';
 
 class ProductDescriptionWidget extends StatelessWidget {
   const ProductDescriptionWidget({

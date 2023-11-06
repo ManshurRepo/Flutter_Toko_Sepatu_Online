@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/components/button.dart';
 import '../../common/components/custom_text_field.dart';
-import '../../common/components/space_height.dart';
+import '../../common/components/space_height_width.dart';
 import '../../common/constants/colors.dart';
 import '../../common/constants/images.dart';
 import '../../data/models/requests/register_request_model.dart';
