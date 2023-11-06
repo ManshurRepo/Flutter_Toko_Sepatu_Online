@@ -4,6 +4,7 @@ import 'package:flutter_fic9_ecommerce_app/common/constants/colors.dart';
 
 import '../../../common/constants/variables.dart';
 import '../../../data/models/responses/products_response_model.dart';
+import '../../product_detail/product_detail_page.dart';
 
 class ProductCard extends StatelessWidget {
   final Products data;
@@ -13,9 +14,13 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        // context,
-        //MaterialPageRoute(builder: (context) => const ) ProductDetailPage())
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProductDetailPage(
+                    product: data,
+                  )),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
