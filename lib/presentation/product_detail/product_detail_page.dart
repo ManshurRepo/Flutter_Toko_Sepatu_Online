@@ -82,7 +82,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CartPage()),
+                    MaterialPageRoute(
+                        builder: (context) => CartPage(
+                              product: widget.product,
+                            )),
                   );
                 },
                 label: "Add to Cart",

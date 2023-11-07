@@ -1,11 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_fic9_ecommerce_app/common/constants/variables.dart';
+import 'package:flutter_fic9_ecommerce_app/common/extensions/int_ext.dart';
+import 'package:flutter_fic9_ecommerce_app/data/models/responses/products_response_model.dart';
 
 import 'package:flutter_fic9_ecommerce_app/presentation/cart/widgets/cart_model.dart';
 
 import '../../../common/components/space_height_width.dart';
 import '../../../common/constants/colors.dart';
-import '../../../common/constants/images.dart';
+import '../../../common/constants/images.dart' as localImages;
 
 class CartItemWidget extends StatefulWidget {
   const CartItemWidget({
@@ -32,8 +35,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            child: Image.asset(
-              widget.data.imagePath,
+            child: Image.network(
+              '${Variables.baseUrl}${widget.data.product.attributes.images.data.first.attributes.url}',
               width: 72.0,
               height: 72.0,
               fit: BoxFit.cover,
@@ -58,7 +61,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                     InkWell(
                       onTap: () {},
                       child: const ImageIcon(
-                        AssetImage(Images.iconTrash),
+                        AssetImage(localImages.Images.iconTrash),
                         size: 24.0,
                       ),
                     ),
@@ -69,7 +72,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      widget.data.priceFormat,
+                      int.parse(widget.data.product.attributes.price)
+                          .currencyFormatRp,
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
