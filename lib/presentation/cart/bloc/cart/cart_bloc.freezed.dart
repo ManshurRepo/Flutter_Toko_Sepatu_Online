@@ -19,21 +19,21 @@ mixin _$CartEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(Products cart) add,
+    required TResult Function(CartModel cart) add,
     required TResult Function(CartModel cart) remove,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(Products cart)? add,
+    TResult? Function(CartModel cart)? add,
     TResult? Function(CartModel cart)? remove,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(Products cart)? add,
+    TResult Function(CartModel cart)? add,
     TResult Function(CartModel cart)? remove,
     required TResult orElse(),
   }) =>
@@ -118,7 +118,7 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(Products cart) add,
+    required TResult Function(CartModel cart) add,
     required TResult Function(CartModel cart) remove,
   }) {
     return started();
@@ -128,7 +128,7 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(Products cart)? add,
+    TResult? Function(CartModel cart)? add,
     TResult? Function(CartModel cart)? remove,
   }) {
     return started?.call();
@@ -138,7 +138,7 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(Products cart)? add,
+    TResult Function(CartModel cart)? add,
     TResult Function(CartModel cart)? remove,
     required TResult orElse(),
   }) {
@@ -192,7 +192,7 @@ abstract class _$$AddImplCopyWith<$Res> {
   factory _$$AddImplCopyWith(_$AddImpl value, $Res Function(_$AddImpl) then) =
       __$$AddImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Products cart});
+  $Res call({CartModel cart});
 }
 
 /// @nodoc
@@ -211,7 +211,7 @@ class __$$AddImplCopyWithImpl<$Res>
       null == cart
           ? _value.cart
           : cart // ignore: cast_nullable_to_non_nullable
-              as Products,
+              as CartModel,
     ));
   }
 }
@@ -222,7 +222,7 @@ class _$AddImpl implements _Add {
   const _$AddImpl(this.cart);
 
   @override
-  final Products cart;
+  final CartModel cart;
 
   @override
   String toString() {
@@ -250,7 +250,7 @@ class _$AddImpl implements _Add {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(Products cart) add,
+    required TResult Function(CartModel cart) add,
     required TResult Function(CartModel cart) remove,
   }) {
     return add(cart);
@@ -260,7 +260,7 @@ class _$AddImpl implements _Add {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(Products cart)? add,
+    TResult? Function(CartModel cart)? add,
     TResult? Function(CartModel cart)? remove,
   }) {
     return add?.call(cart);
@@ -270,7 +270,7 @@ class _$AddImpl implements _Add {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(Products cart)? add,
+    TResult Function(CartModel cart)? add,
     TResult Function(CartModel cart)? remove,
     required TResult orElse(),
   }) {
@@ -316,9 +316,9 @@ class _$AddImpl implements _Add {
 }
 
 abstract class _Add implements CartEvent {
-  const factory _Add(final Products cart) = _$AddImpl;
+  const factory _Add(final CartModel cart) = _$AddImpl;
 
-  Products get cart;
+  CartModel get cart;
   @JsonKey(ignore: true)
   _$$AddImplCopyWith<_$AddImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -389,7 +389,7 @@ class _$RemoveImpl implements _Remove {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(Products cart) add,
+    required TResult Function(CartModel cart) add,
     required TResult Function(CartModel cart) remove,
   }) {
     return remove(cart);
@@ -399,7 +399,7 @@ class _$RemoveImpl implements _Remove {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(Products cart)? add,
+    TResult? Function(CartModel cart)? add,
     TResult? Function(CartModel cart)? remove,
   }) {
     return remove?.call(cart);
@@ -409,7 +409,7 @@ class _$RemoveImpl implements _Remove {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(Products cart)? add,
+    TResult Function(CartModel cart)? add,
     TResult Function(CartModel cart)? remove,
     required TResult orElse(),
   }) {

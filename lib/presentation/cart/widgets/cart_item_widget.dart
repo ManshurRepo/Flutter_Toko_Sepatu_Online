@@ -50,9 +50,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Sepatu Nike",
-                      style: TextStyle(
+                    Text(
+                      widget.data.product.attributes.name,
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
