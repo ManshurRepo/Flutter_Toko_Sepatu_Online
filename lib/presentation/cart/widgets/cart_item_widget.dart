@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fic9_ecommerce_app/common/constants/variables.dart';
 import 'package:flutter_fic9_ecommerce_app/common/extensions/int_ext.dart';
 import 'package:flutter_fic9_ecommerce_app/data/models/responses/products_response_model.dart';
+import 'package:flutter_fic9_ecommerce_app/presentation/cart/bloc/cart/cart_bloc.dart';
 
 import 'package:flutter_fic9_ecommerce_app/presentation/cart/widgets/cart_model.dart';
 
@@ -87,39 +89,39 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         color: ColorName.border,
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
                       ),
-                      child: StatefulBuilder(
-                        builder: (context, setState) => Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (widget.data.quantity > 0) {
-                                  widget.data.quantity--;
-                                  setState(() {});
-                                }
-                              },
-                              child: Container(
-                                color: ColorName.white,
-                                child: const Icon(Icons.remove),
-                              ),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (widget.data.quantity > 0) {
+                                context
+                                    .read<CartBloc>()
+                                    .add(CartEvent.remove(widget.data));
+                              }
+                            },
+                            child: Container(
+                              color: ColorName.white,
+                              child: const Icon(Icons.remove),
                             ),
-                            SizedBox(
-                              width: 40.0,
-                              child: Center(
-                                child: Text(widget.data.quantity.toString()),
-                              ),
+                          ),
+                          SizedBox(
+                            width: 40.0,
+                            child: Center(
+                              child: Text(widget.data.quantity.toString()),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                widget.data.quantity++;
-                                setState(() {});
-                              },
-                              child: Container(
-                                color: ColorName.white,
-                                child: const Icon(Icons.add),
-                              ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CartBloc>()
+                                  .add(CartEvent.add(widget.data));
+                            },
+                            child: Container(
+                              color: ColorName.white,
+                              child: const Icon(Icons.add),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

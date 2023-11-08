@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fic9_ecommerce_app/data/models/responses/products_response_model.dart';
 
 import '../../common/components/button.dart';
@@ -6,7 +7,9 @@ import '../../common/components/space_height_width.dart';
 import '../../common/constants/colors.dart';
 import '../../common/constants/images.dart' as localImages;
 import '../../common/constants/variables.dart';
+import '../cart/bloc/cart/cart_bloc.dart';
 import '../cart/cart_page.dart';
+import '../cart/widgets/cart_model.dart';
 import '../home/widgets/image_slider.dart';
 import '../home/widgets/product_model.dart';
 import 'widgets/product_description_widget.dart';
@@ -80,12 +83,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Flexible(
               child: Button.filled(
                 onPressed: () {
+                  context.read<CartBloc>().add(CartEvent.add(
+                      CartModel(product: widget.product, quantity: 1)));
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => CartPage(
-                              product: widget.product,
-                            )),
+                    MaterialPageRoute(builder: (context) => CartPage()),
                   );
                 },
                 label: "Add to Cart",

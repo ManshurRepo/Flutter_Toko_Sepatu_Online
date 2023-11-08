@@ -10,17 +10,14 @@ import '../../common/components/button.dart';
 import '../../common/components/row_text.dart';
 import '../../common/components/space_height_width.dart';
 import '../../common/constants/colors.dart';
-import '../../common/constants/images.dart';
 import 'widgets/cart_item_widget.dart';
 import 'widgets/cart_model.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({
     Key? key,
-    required this.product,
   }) : super(key: key);
 
-  final Products product;
   @override
   State<CartPage> createState() => _CartPageState();
 }
@@ -28,9 +25,6 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   void initState() {
-    context
-        .read<CartBloc>()
-        .add(CartEvent.add(CartModel(product: widget.product, quantity: 1)));
     super.initState();
   }
 
@@ -77,14 +71,34 @@ class _CartPageState extends State<CartPage> {
             ),
             child: Column(
               children: [
-                // RowText(
-                //   label: 'Item (${carts.length})',
-                //   value: 1750000.currencyFormatRp,
-                // ),
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () {
+                        return RowText(
+                          label: 'Total Harga',
+                          value: 0.currencyFormatRp,
+                        );
+                      },
+                      loaded: (carts) {
+                        int totalPrice = 0;
+                        carts.forEach((element) {
+                          totalPrice +=
+                              int.parse(element.product.attributes.price) *
+                                  element.quantity;
+                        });
+                        return RowText(
+                          label: 'Total Harga',
+                          value: totalPrice.currencyFormatRp,
+                        );
+                      },
+                    );
+                  },
+                ),
                 const SpaceHeight(12.0),
-                const RowText(
+                RowText(
                   label: 'Biaya Pengiriman',
-                  value: 'Free Ongkir', //150000.currencyFormatRp,
+                  value: 150000.currencyFormatRp,
                 ),
                 const SpaceHeight(40.0),
                 const Divider(color: ColorName.border),
