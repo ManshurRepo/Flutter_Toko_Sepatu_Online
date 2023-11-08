@@ -9,7 +9,7 @@ part 'cart_state.dart';
 part 'cart_bloc.freezed.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc() : super(const _Initial()) {
+  CartBloc() : super(const _Loaded([])) {
     on<_Add>((event, emit) {
       final currentState = state as _Loaded;
       // bila produk ada di cart, maka tambahkan quantity
@@ -17,11 +17,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           .indexWhere((element) => element.product.id == event.cart.product.id);
       if (index >= 0) {
         currentState.carts[index].quantity += 1;
+        emit(const _Loading());
+        emit(_Loaded(currentState.carts));
       } else {
-        currentState.carts
-            .add(CartModel(product: event.cart.product, quantity: 1));
+        emit(_Loaded([...currentState.carts, event.cart]));
       }
-      emit(_Loaded(currentState.carts));
     });
 
     on<_Remove>((event, emit) {

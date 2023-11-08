@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_fic9_ecommerce_app/common/extensions/int_ext.dart';
 import 'package:flutter_fic9_ecommerce_app/data/models/responses/products_response_model.dart';
+import 'package:flutter_fic9_ecommerce_app/presentation/cart/bloc/cart/cart_bloc.dart';
 
 import '../../common/components/button.dart';
 import '../../common/components/row_text.dart';
@@ -25,6 +27,14 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   @override
+  void initState() {
+    context
+        .read<CartBloc>()
+        .add(CartEvent.add(CartModel(product: widget.product, quantity: 1)));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -33,44 +43,32 @@ class _CartPageState extends State<CartPage> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // if (carts.isEmpty)
-          // Center(
-          //   child: Padding(
-          //     padding: EdgeInsets.only(
-          //         top: MediaQuery.of(context).size.height * 0.2),
-          //     child: Column(
-          //       children: [
-          //         const Text(
-          //           'Oppsss..\nKeranjang Anda kosong nih!',
-          //           style: TextStyle(fontSize: 18.0),
-          //           textAlign: TextAlign.center,
-          //         ),
-          //         const SpaceHeight(20.0),
-          //         Button.filled(
-          //           width: 120.0,
-          //           height: 40.0,
-          //           onPressed: () {
-          //             Navigator.popUntil(context, (route) => route.isFirst);
-          //           },
-          //           label: 'Cari yuk',
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => const SpaceHeight(16.0),
-            itemCount: 1,
-            itemBuilder: (context, index) {
-              return CartItemWidget(
-                data: CartModel(product: widget.product, quantity: 1),
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                orElse: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                loaded: (carts) {
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) =>
+                        const SpaceHeight(16.0),
+                    itemCount: carts.length,
+                    itemBuilder: (context, index) {
+                      return CartItemWidget(
+                        data: carts[index],
+                      );
+                    },
+                  );
+                },
               );
             },
           ),
-          // if (carts.isNotEmpty) const SpaceHeight(70.0),
-          // if (carts.isNotEmpty)
+          const SpaceHeight(70.0),
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
