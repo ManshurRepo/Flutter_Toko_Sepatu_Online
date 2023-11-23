@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fic9_ecommerce_app/data/datasource/auth_local_datasource.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_fic9_ecommerce_app/presentation/auth/bloc/register/regis
 import 'package:flutter_fic9_ecommerce_app/presentation/auth/login_page.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/auth/splash_page.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/cart/bloc/cart/cart_bloc.dart';
+import 'package:flutter_fic9_ecommerce_app/presentation/cart/bloc/order/order_bloc.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/dashboard/dashboard_page.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/home/bloc/bloc/products_bloc.dart';
 
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CartBloc(),
+        ),
+        BlocProvider(
+          create: (context) => OrderBloc(),
         ),
       ],
       child: MaterialApp(

@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_fic9_ecommerce_app/common/extensions/int_ext.dart';
+import 'package:flutter_fic9_ecommerce_app/data/models/requests/order_request_model.dart';
 import 'package:flutter_fic9_ecommerce_app/data/models/responses/products_response_model.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/cart/bloc/cart/cart_bloc.dart';
+import 'package:flutter_fic9_ecommerce_app/presentation/payment/payment_page.dart';
 
 import '../../common/components/button.dart';
 import '../../common/components/row_text.dart';
 import '../../common/components/space_height_width.dart';
 import '../../common/constants/colors.dart';
+import 'bloc/order/order_bloc.dart';
 import 'widgets/cart_item_widget.dart';
 import 'widgets/cart_model.dart';
 
@@ -27,6 +30,9 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
   }
+
+  List<Item> items = [];
+  int localTotalPrice = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +77,14 @@ class _CartPageState extends State<CartPage> {
             ),
             child: Column(
               children: [
+                const SpaceHeight(12.0),
+                const RowText(
+                  label: 'Biaya Pengiriman',
+                  value: 'Free Ongkir',
+                ),
+                const SpaceHeight(40.0),
+                const Divider(color: ColorName.border),
+                const SpaceHeight(12.0),
                 BlocBuilder<CartBloc, CartState>(
                   builder: (context, state) {
                     return state.maybeWhen(
@@ -87,40 +101,71 @@ class _CartPageState extends State<CartPage> {
                               int.parse(element.product.attributes.price) *
                                   element.quantity;
                         });
+                        localTotalPrice = totalPrice;
+                        items = carts
+                            .map(
+                              (e) => Item(
+                                  id: e.product.id,
+                                  productName: e.product.attributes.name,
+                                  price: int.parse(e.product.attributes.price),
+                                  qty: e.quantity),
+                            )
+                            .toList();
+
                         return RowText(
                           label: 'Total Harga',
                           value: totalPrice.currencyFormatRp,
+                          fontWeight: FontWeight.w700,
+                          valueColor: ColorName.primary,
                         );
                       },
                     );
                   },
                 ),
-                const SpaceHeight(12.0),
-                RowText(
-                  label: 'Biaya Pengiriman',
-                  value: 150000.currencyFormatRp,
-                ),
-                const SpaceHeight(40.0),
-                const Divider(color: ColorName.border),
-                const SpaceHeight(12.0),
-                RowText(
-                  label: 'Total Harga',
-                  value: 1750000.currencyFormatRp,
-                  valueColor: ColorName.primary,
-                  fontWeight: FontWeight.w700,
-                ),
                 const SpaceHeight(16.0),
-                Button.filled(
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const PaymentPage(
-                    //             url: '',
-                    //           )),
-                    // );
+                BlocConsumer<OrderBloc, OrderState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                      orElse: () {},
+                      success: (response) {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return PaymentPage(
+                            invoiceUrl: response.invoiceUrl,
+                          );
+                        }));
+                      },
+                    );
                   },
-                  label: 'Bayar Sekarang',
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () {
+                        return Button.filled(
+                          onPressed: () {
+                            context.read<OrderBloc>().add(
+                                  OrderEvent.order(
+                                    OrderRequestModel(
+                                      data: Data(
+                                        items: items,
+                                        totalPrice: localTotalPrice,
+                                        deliveryAddress: 'Kawali',
+                                        courierName: 'JNE',
+                                        courierPrice: 0,
+                                        status: 'waiting_payment',
+                                      ),
+                                    ),
+                                  ),
+                                );
+                          },
+                          label: 'Bayar Sekarang',
+                        );
+                      },
+                      loading: () {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),
