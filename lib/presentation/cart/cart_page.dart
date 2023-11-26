@@ -128,9 +128,11 @@ class _CartPageState extends State<CartPage> {
                     state.maybeWhen(
                       orElse: () {},
                       success: (response) {
+                        context.read<CartBloc>().add(const CartEvent.started());
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
                           return PaymentPage(
                             invoiceUrl: response.invoiceUrl,
+                            orderId: response.externalId,
                           );
                         }));
                       },
@@ -147,10 +149,10 @@ class _CartPageState extends State<CartPage> {
                                       data: Data(
                                         items: items,
                                         totalPrice: localTotalPrice,
-                                        deliveryAddress: 'Kawali',
+                                        deliveryAddress: 'Ciamis, Kawali',
                                         courierName: 'JNE',
                                         courierPrice: 0,
-                                        status: 'waiting_payment',
+                                        status: 'waiting-payment',
                                       ),
                                     ),
                                   ),

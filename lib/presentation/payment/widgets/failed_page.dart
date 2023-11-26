@@ -10,6 +10,10 @@ class FailedPage extends StatefulWidget {
 class _FailedPageState extends State<FailedPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      body: Center(
+        child: Text('Pembayaran Gagal'),
+      ),
+    );
   }
 }
