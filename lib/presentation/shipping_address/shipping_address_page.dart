@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fic9_ecommerce_app/common/components/space_height_width.dart';
+import 'package:flutter_fic9_ecommerce_app/data/models/responses/get_address_response_model.dart';
+import 'package:flutter_fic9_ecommerce_app/presentation/shipping_address/bloc/get_address/get_address_bloc.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/shipping_address/models/address_model.dart';
 
 import '../../common/components/button.dart';
@@ -15,7 +18,7 @@ class ShippingAddressPage extends StatefulWidget {
 }
 
 class _ShippingAddressPageState extends State<ShippingAddressPage> {
-  final ValueNotifier<int> selectedIndex = ValueNotifier(1);
+  // final ValueNotifier<int> selectedIndex = ValueNotifier(1);
   final List<AddressModel> addresses = [
     AddressModel(
       name: 'Abdul Rozak',
@@ -28,6 +31,13 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
       phoneNumber: '082999000999',
     ),
   ];
+
+  int? idAddress;
+  @override
+  void initState() {
+    context.read<GetAddressBloc>().add(const GetAddressEvent.getAddress());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,40 +56,25 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
           ),
         ],
       ),
-      body: addresses.isEmpty
-          ? Center(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height / 4),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Opppsss..\nAlamat anda belum tersedia nih!',
-                      style: TextStyle(fontSize: 18.0),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SpaceHeight(20.0),
-                    Button.filled(
-                      width: 180.0,
-                      height: 40.0,
-                      onPressed: () {},
-                      label: 'Tambahkan yuk',
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : ValueListenableBuilder(
-              valueListenable: selectedIndex,
-              builder: (context, value, _) => ListView.separated(
+      body: BlocBuilder<GetAddressBloc, GetAddressState>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            orElse: () {
+              return const Center(
+                child: Text('No Data'),
+              );
+            },
+            loaded: (data) {
+              return ListView.separated(
                 padding: const EdgeInsets.all(16.0),
                 separatorBuilder: (context, index) => const SpaceHeight(16.0),
-                itemCount: addresses.length,
+                itemCount: data.data.length,
                 itemBuilder: (context, index) => AddressTile(
-                  isSelected: value == index,
-                  data: addresses[index],
+                  isSelected: idAddress == data.data[index].id,
+                  data: data.data[index],
                   onTap: () {
-                    selectedIndex.value = index;
+                    idAddress = data.data[index].id;
+                    setState(() {});
                   },
                   onEditTap: () {
                     // Navigator.push(
@@ -93,23 +88,24 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                   },
                   onDeleteTap: () {},
                 ),
-              ),
-            ),
-      bottomNavigationBar: ValueListenableBuilder(
-        valueListenable: selectedIndex,
-        builder: (context, value, _) => Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Button.filled(
-            onPressed: () {
-              Navigator.pop(context);
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => const OrderDetailPage()),
-              // );
+              );
             },
-            label: 'Pilih',
-          ),
+          );
+        },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Button.filled(
+          disabled: idAddress == null,
+          onPressed: () {
+            Navigator.pop(context, idAddress);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => const OrderDetailPage()),
+            // );
+          },
+          label: 'Pilih',
         ),
       ),
     );

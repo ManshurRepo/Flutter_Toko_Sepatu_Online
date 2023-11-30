@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fic9_ecommerce_app/data/models/responses/get_address_response_model.dart';
 
 import '../../../common/components/button.dart';
 import '../../../common/components/space_height_width.dart';
@@ -7,7 +8,7 @@ import '../models/address_model.dart';
 
 class AddressTile extends StatelessWidget {
   final bool isSelected;
-  final AddressModel data;
+  final GetAddress data;
   final VoidCallback onTap;
   final VoidCallback onEditTap;
   final VoidCallback onDeleteTap;
@@ -36,7 +37,7 @@ class AddressTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              data.name,
+              data.attributes.name,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
@@ -44,7 +45,7 @@ class AddressTile extends StatelessWidget {
             ),
             const SpaceHeight(16.0),
             Text(
-              data.address,
+              data.attributes.address,
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -53,7 +54,7 @@ class AddressTile extends StatelessWidget {
             ),
             const SpaceHeight(16.0),
             Text(
-              data.phoneNumber,
+              data.attributes.phone,
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,

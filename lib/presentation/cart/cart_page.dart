@@ -7,6 +7,7 @@ import 'package:flutter_fic9_ecommerce_app/data/models/requests/order_request_mo
 import 'package:flutter_fic9_ecommerce_app/data/models/responses/get_address_response_model.dart';
 import 'package:flutter_fic9_ecommerce_app/data/models/responses/products_response_model.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/cart/bloc/cart/cart_bloc.dart';
+import 'package:flutter_fic9_ecommerce_app/presentation/cart/bloc/get_cost/get_cost_bloc.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/payment/payment_page.dart';
 import 'package:flutter_fic9_ecommerce_app/presentation/shipping_address/bloc/get_address/get_address_bloc.dart';
 
@@ -78,12 +79,13 @@ class _CartPageState extends State<CartPage> {
             margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Button.filled(
               width: 60,
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                idAddress = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const ShippingAddressPage()),
                 );
+                setState(() {});
               },
               label: 'Pilih Alamat Pengiriman',
             ),
@@ -106,11 +108,22 @@ class _CartPageState extends State<CartPage> {
                     );
                   }
                   // get address is default
-                  final address = data.data.firstWhere(
-                    (element) => element.attributes.isDefault,
-                    orElse: () => data.data.first,
-                  );
-
+                  // final address = data.data.firstWhere(
+                  //   (element) => element.attributes.isDefault,
+                  //   orElse: () => data.data.first,
+                  // );
+                  final address = idAddress != 0
+                      ? data.data.firstWhere(
+                          (element) => element.id == idAddress,
+                          orElse: () => data.data.first,
+                        )
+                      : data.data.last;
+                  context.read<GetCostBloc>().add(GetCostEvent.getCost(
+                        origin: '5779',
+                        destination:
+                            address.attributes.subdistrictId.toString(),
+                        courier: 'jne',
+                      ));
                   return Container(
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
@@ -172,10 +185,65 @@ class _CartPageState extends State<CartPage> {
             ),
             child: Column(
               children: [
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () {
+                        return RowText(
+                          label: 'Total Harga',
+                          value: 0.currencyFormatRp,
+                        );
+                      },
+                      loaded: (carts) {
+                        int totalPrice = 0;
+                        carts.forEach((element) {
+                          totalPrice +=
+                              int.parse(element.product.attributes.price) *
+                                  element.quantity;
+                        });
+                        localTotalPrice = totalPrice;
+                        items = carts
+                            .map(
+                              (e) => Item(
+                                id: e.product.id,
+                                productName: e.product.attributes.name,
+                                price: int.parse(e.product.attributes.price),
+                                qty: e.quantity,
+                              ),
+                            )
+                            .toList();
+                        return RowText(
+                          label: 'Total Harga',
+                          value: totalPrice.currencyFormatRp,
+                        );
+                      },
+                    );
+                  },
+                ),
                 const SpaceHeight(12.0),
-                const RowText(
-                  label: 'Biaya Pengiriman',
-                  value: 'Free Ongkir',
+                BlocBuilder<GetCostBloc, GetCostState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () {
+                        return RowText(
+                          label: 'Biaya Pengiriman',
+                          value: 0.currencyFormatRp,
+                        );
+                      },
+                      loading: () {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                      loaded: (cost) {
+                        return RowText(
+                          label: 'Biaya Pengiriman',
+                          value: cost.rajaongkir.results.first.costs.first.cost
+                              .first.value.currencyFormatRp,
+                        );
+                      },
+                    );
+                  },
                 ),
                 const SpaceHeight(40.0),
                 const Divider(color: ColorName.border),
