@@ -108,7 +108,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
                   );
                 },
                 loaded: (provinces) {
-                  selectedProvince = provinces.first;
+                  if (!provinces.contains(selectedProvince)) {
+                    selectedProvince = provinces.first;
+                  }
+                  // selectedProvince = provinces.first;
                   return CustomDropdown<Province>(
                     value: selectedProvince,
                     items: provinces,
@@ -129,6 +132,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
             },
           ),
           const SpaceHeight(24.0),
+          // ...
+
           BlocBuilder<CityBloc, CityState>(
             builder: (context, state) {
               return state.maybeWhen(
@@ -146,35 +151,51 @@ class _AddAddressPageState extends State<AddAddressPage> {
                   );
                 },
                 loaded: (cities) {
-                  selectedCity = cities.first;
+                  if (!cities.contains(selectedCity)) {
+                    selectedCity = cities.first;
+                  }
                   return CustomDropdown<City>(
                     value: selectedCity,
                     items: cities,
                     label: 'Kota/Kabupaten',
                     onChanged: (value) {
-                      selectedCity = value!;
-                      context.read<SubdistrictBloc>().add(
-                            SubdistrictEvent.getAllByCityId(
-                              selectedCity.cityId,
-                            ),
-                          );
+                      setState(() {
+                        selectedCity = value!;
+                        context.read<SubdistrictBloc>().add(
+                              SubdistrictEvent.getAllByCityId(
+                                selectedCity.cityId,
+                              ),
+                            );
+                      });
                     },
                   );
                 },
               );
             },
           ),
-          const SpaceHeight(24.0),
+
+// ...
+
           BlocBuilder<SubdistrictBloc, SubdistrictState>(
             builder: (context, state) {
               return state.maybeWhen(
                 orElse: () {
+                  return CustomDropdown(
+                    value: '-',
+                    items: const ['-'],
+                    label: 'Kecamatan',
+                    onChanged: (value) {},
+                  );
+                },
+                loading: () {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 },
                 loaded: (subdistrict) {
-                  selectedSubDistrict = subdistrict.first;
+                  if (!subdistrict.contains(selectedSubDistrict)) {
+                    selectedSubDistrict = subdistrict.first;
+                  }
                   return CustomDropdown(
                     value: selectedSubDistrict,
                     items: subdistrict,
@@ -189,6 +210,79 @@ class _AddAddressPageState extends State<AddAddressPage> {
               );
             },
           ),
+
+// ...
+
+          // BlocBuilder<CityBloc, CityState>(
+          //   builder: (context, state) {
+          //     return state.maybeWhen(
+          //       orElse: () {
+          //         return CustomDropdown(
+          //           value: '-',
+          //           items: const ['-'],
+          //           label: 'Kota/Kabupaten',
+          //           onChanged: (value) {},
+          //         );
+          //       },
+          //       loading: () {
+          //         return const Center(
+          //           child: CircularProgressIndicator(),
+          //         );
+          //       },
+          //       loaded: (cities) {
+          //         selectedCity = cities.first;
+          //         return CustomDropdown<City>(
+          //           value: selectedCity,
+          //           items: cities,
+          //           label: 'Kota/Kabupaten',
+          //           onChanged: (value) {
+          //             setState(() {
+          //               selectedCity = value!;
+          //               context.read<SubdistrictBloc>().add(
+          //                     SubdistrictEvent.getAllByCityId(
+          //                       selectedCity.cityId,
+          //                     ),
+          //                   );
+          //             });
+          //           },
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
+          // const SpaceHeight(24.0),
+          // BlocBuilder<SubdistrictBloc, SubdistrictState>(
+          //   builder: (context, state) {
+          //     return state.maybeWhen(
+          //       orElse: () {
+          //         return CustomDropdown(
+          //           value: '-',
+          //           items: const ['-'],
+          //           label: 'Kecamatan',
+          //           onChanged: (value) {},
+          //         );
+          //       },
+          //       loading: () {
+          //         return const Center(
+          //           child: CircularProgressIndicator(),
+          //         );
+          //       },
+          //       loaded: (subdistrict) {
+          //         selectedSubDistrict = subdistrict.first;
+          //         return CustomDropdown(
+          //           value: selectedSubDistrict,
+          //           items: subdistrict,
+          //           label: 'Kecamatan',
+          //           onChanged: (value) {
+          //             setState(() {
+          //               selectedSubDistrict = value!;
+          //             });
+          //           },
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
           const SpaceHeight(24.0),
           CustomTextField2(
             controller: zipCodeController,
