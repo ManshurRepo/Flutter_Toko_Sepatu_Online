@@ -42,7 +42,8 @@ class _CartPageState extends State<CartPage> {
   List<Item> items = [];
   int localTotalPrice = 0;
 
-  var idAddress = '0';
+  // String idAddress = '0';
+  int idAddress = 0;
   String courierName = 'pilih';
   int courierPrice = 0;
 
@@ -140,7 +141,7 @@ class _CartPageState extends State<CartPage> {
                                   (element) => element.id == idAddress,
                                   orElse: () => data.data.first,
                                 )
-                              : data.data.first;
+                              : data.data.last;
 
                           // print('Selected Address ID: ${idAddress}');
                           // print('Actual Address ID: ${address.id}');
@@ -153,7 +154,9 @@ class _CartPageState extends State<CartPage> {
                                     address.attributes.subdistrictId.toString(),
                                 courier: 'jne',
                               ));
-                          idAddress = address.attributes.subdistrictId;
+
+                          // idAddress = address.attributes.subdistrictId;
+                          idAddress = address.id;
 
                           return Container(
                             padding: const EdgeInsets.all(16.0),
@@ -207,6 +210,7 @@ class _CartPageState extends State<CartPage> {
                     },
                   ),
                   const SpaceHeight(16.0),
+
                   Container(
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fic9_ecommerce_app/common/extensions/int_ext.dart';
+import 'package:flutter_fic9_ecommerce_app/data/models/responses/buyer_order_response_model.dart';
 
 import '../../../common/components/button.dart';
 import '../../../common/components/row_text.dart';
@@ -9,7 +11,7 @@ import '../order_detail_page.dart';
 import 'manifest_delivery_page.dart';
 
 class OrderCard extends StatelessWidget {
-  final TransactionModel data;
+  final BuyerOrder data;
   const OrderCard({super.key, required this.data});
 
   @override
@@ -18,7 +20,10 @@ class OrderCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const OrderDetailPage()),
+          MaterialPageRoute(
+              builder: (context) => OrderDetailPage(
+                    buyerOrder: data,
+                  )),
         );
       },
       child: Container(
@@ -33,7 +38,7 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'NO RESI: ${data.noResi}',
+                  'NO RESI: ${data.attributes.noResi}',
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
                 Button.filled(
@@ -41,7 +46,9 @@ class OrderCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ManifestDeliveryPage()),
+                          builder: (context) => ManifestDeliveryPage(
+                                buyerOrder: data,
+                              )),
                     );
                   },
                   label: 'Lacak',
@@ -52,11 +59,13 @@ class OrderCard extends StatelessWidget {
               ],
             ),
             const SpaceHeight(24.0),
-            RowText(label: 'Status', value: data.status),
+            RowText(label: 'Status', value: data.attributes.status),
             const SpaceHeight(12.0),
-            RowText(label: 'Item', value: data.item),
+            // RowText(label: 'Item', value: data.item),
             const SpaceHeight(12.0),
-            RowText(label: 'Harga', value: data.priceFormat),
+            RowText(
+                label: 'Harga',
+                value: data.attributes.totalPrice.currencyFormatRp),
           ],
         ),
       ),

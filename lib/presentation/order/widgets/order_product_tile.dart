@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fic9_ecommerce_app/common/extensions/int_ext.dart';
 
 import '../../../common/components/space_height_width.dart';
 import '../../../common/constants/colors.dart';
+import '../../../data/models/responses/buyer_order_response_model.dart';
 import '../models/order_product_model.dart';
 
 class OrderProductTile extends StatelessWidget {
-  final OrderProductModel data;
+  final Item data;
   const OrderProductTile({super.key, required this.data});
 
   @override
@@ -18,15 +20,15 @@ class OrderProductTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            child: Image.asset(
-              data.imagePath,
-              width: 72.0,
-              height: 72.0,
-              fit: BoxFit.cover,
-            ),
-          ),
+          // ClipRRect(
+          //   borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          //   child: Image.asset(
+          //     data.imagePath,
+          //     width: 72.0,
+          //     height: 72.0,
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           const SpaceWidth(12.0),
           Flexible(
             child: Column(
@@ -34,7 +36,7 @@ class OrderProductTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  data.name,
+                  '${data.productName} x (${data.qty} item)',
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -42,7 +44,7 @@ class OrderProductTile extends StatelessWidget {
                 ),
                 const SpaceHeight(20.0),
                 Text(
-                  data.priceFormat,
+                  '${data.price.currencyFormatRp} x (${data.qty} item) = ${(data.price * data.qty).currencyFormatRp}',
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

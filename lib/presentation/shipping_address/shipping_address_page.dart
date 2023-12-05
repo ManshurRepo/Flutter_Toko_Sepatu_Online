@@ -32,6 +32,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
     ),
   ];
 
+  // String? idAddress;
   int? idAddress;
   @override
   void initState() {
@@ -73,6 +74,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                   isSelected: idAddress == data.data[index].id,
                   data: data.data[index],
                   onTap: () {
+                    // idAddress = data.data[index].attributes.subdistrictId;
                     idAddress = data.data[index].id;
                     setState(() {});
                   },
